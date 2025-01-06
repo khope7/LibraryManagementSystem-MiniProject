@@ -109,8 +109,6 @@ class Book:
             else:
                 print("Apologies, please enter both first and last name of any user added to the user list. Numbers and special characters are accepted.")
                 BookOperations.book_operations()
-#####################WORK ON THIS#######################################################################
-
 
 #Created nested if to find book and check for availability, returning user to Book operations for possible entries
         if borrow_choice in books_catelog.get_books():

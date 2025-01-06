@@ -26,22 +26,22 @@ Choose any option: '''))
                     print("Unable to proceed, choice must be between 1 and 5. Please try again.")
                     break
                 elif second_choice == 1:
-                    User.user_name()
+                    User.add_user()
                     break
                 elif second_choice == 2:
-                    User.user_details()
+                    User.search_user_details()
                     break
                 elif second_choice == 3:
-                    User.display_user()
+                    User.display_user_details()
                     break
                 elif second_choice == 4:
                     main.main()
                     break
                 elif second_choice == 5:
-                    BookOperations.book_operations()
+                    BookOperations.BookOperations.book_operations()
                     break  
                 elif second_choice == 6:
-                    AuthorOperations.author_operations()
+                    AuthorOperations.AuthorOperations.author_operations()
                     break  
                 elif second_choice == 7:
                     User.exit_system()
@@ -89,5 +89,31 @@ class User:
 
         User.user_details[new_user] = {"User" : new_user, "UserID" : user_id, "Borrowed Books": "N/A"}
 
+    def search_user_details():
+        search = False
+        searched_user_check = input("What is the first and last name of the user you would like to search? ").title()
+#Using regex split method to turn user entry into temporary list and eliminating spacing
+        parts = re.split(r" ", searched_user_check)
+#Sends user back to function upon incorrect entry type
+        if len(parts) < 2 or len(parts) > 2:
+                print("Apologies, please enter both first and last name only. Numbers and special characters are accepted.")
+        for user in users.get_user_details():
+                if searched_user_check in user:
+                    search = True
+        if search == True:
+            print (f"Here are the details for your searched user:\n{User.user_details[searched_user_check]}")
+        else:
+            print ("Apologies, search failed: User searched must be in author list. Please try again.")
+        
+        UserOperations.user_operations()       
+
+    def display_user_details():
+        print("Here is your current list of users")
+        for user, detail in users.get_user_details().items():
+            print(f"{user} - Info: {detail}")
+        UserOperations.user_operations()      
+
     def exit_system():
         exit()
+
+users = User(User.user_details)
