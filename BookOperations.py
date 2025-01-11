@@ -41,6 +41,8 @@ Choose any option: '''))
                     Book.exit_system()
             except ValueError:
                 print("Apologies, choice must be the number of one of the mentioned operations. Please try again.")
+            except UnboundLocalError:
+                BookOperations.book_operations()            
 
 
 #Created Book class to hold all book keeping actions
@@ -103,34 +105,45 @@ class Book:
 
 #Created borrow book class to allow for user to take book
     def borrow_book():
-#Asking user to find user borrowing
-        find_user = input("Please enter the first and last name of the user to borrow to: \n").title()
-#Using regex split method to turn user entry into temporary list and eliminating spacing
-        parts = re.split(r" ", find_user)
-#Sends user back to function upon incorrect entry type
-        if len(parts) < 2 or len(parts) > 2:
-                print("Apologies, entry must have first and last name of any user added to the user list. Numbers and special characters are accepted.")
-                BookOperations.book_operations()
+        if Book.library == {}:
+            print("Apologies, library must have at least one book.")
+            BookOperations.book_operations()
+        if UserOperations.User.user_details == {}:
+            print("Apologies, at least one user must exist before book can be borrowed.")
+            BookOperations.book_operations()
         else:
-            borrowing_user = parts[0] + " " + parts[1]
-            if borrowing_user in UserOperations.User.user_details:
-                print(f"Here is a list of all books in current library:\n{Book.get_books()}")
-                borrow_choice = input(f"What book would you like {borrowing_user} to take? ").title()
-            else:
-                print("Apologies, entry must have first and last name of any user added to the user list. Numbers and special characters are accepted.")
-                BookOperations.book_operations()
+#Asking user to find user borrowing
+            while True:
+                print(f"Here is the current list of users:")
+                for user in UserOperations.User.user_details:
+                    print(user)
+                find_user = input("Please enter the first and last name of the user to borrow to: \n").title()
+#Using regex split method to turn user entry into temporary list and eliminating spacing
+                parts = re.split(r" ", find_user)
+#Sends user back to function upon incorrect entry type
+                if len(parts) < 2 or len(parts) > 2:
+                        print("Apologies, entry must have first and last name of any user added to the user list. Numbers and special characters are accepted.")
+                else:
+                    borrowing_user = parts[0] + " " + parts[1]
+                    if borrowing_user in UserOperations.User.user_details:
+                        print(f"Here is a list of all books in current library:\n{books_catelog.get_books()}")
+                        borrow_choice = input(f"What book would you like {borrowing_user} to take? ").title()
+                    else:
+                        print("Apologies, entry must have first and last name of any user added to the user list. Numbers and special characters are accepted.")
 
 #Created nested if to find book and check for availability, returning user to Book Operations for possible entries
-        if borrow_choice in books_catelog.get_books():
-            if Book.library[borrow_choice]["Availability"] == "Available":
-                Book.library[borrow_choice]["Availability"] = "Taken"
-                Book.borrow_list.append(borrow_choice)
-                UserOperations.User.user_details[borrowing_user]["Borrowed Books"] = Book.borrow_list
-                print(f"{borrow_choice}: Has been borrowed")
-            elif Book.library[borrow_choice]["Availability"] == "Taken":
-                print("Apologies, entry has already been taken")
-        else:
-            print("Apologies, entry is not within library")
+                if borrow_choice in books_catelog.get_books():
+                    if Book.library[borrow_choice]["Availability"] == "Available":
+                        Book.library[borrow_choice]["Availability"] = "Taken"
+                        Book.borrow_list.append(borrow_choice)
+                        UserOperations.User.user_details[borrowing_user]["Borrowed Books"] = Book.borrow_list
+                        print(f"{borrow_choice}: Has been borrowed")
+                        break
+                    elif Book.library[borrow_choice]["Availability"] == "Taken":
+                        print("Apologies, entry has already been taken")
+                        break
+                else:
+                    print("Apologies, entry is not within library")
     
 #Created return book class to all for user to return book
     def return_book():

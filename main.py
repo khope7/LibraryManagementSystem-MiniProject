@@ -44,6 +44,8 @@ Choose any option: '''))
                 break
         except ValueError:
             print("Apologies, choice must be the number of one of the mentioned operations. Please try again.")
+        except UnboundLocalError:
+            main()
 
 #Created exit System for main function
 def exit_system():

@@ -30,7 +30,8 @@ Choose any option: '''))
                     Author.exit_system()                                        
             except ValueError:
                 print("Apologies, choice must be the number of one of the mentioned operations. Please try again.")
-
+            except UnboundLocalError:
+                AuthorOperations.author_operations()   
 
 #Created Book class to hold all book keeping actions
 class Author:

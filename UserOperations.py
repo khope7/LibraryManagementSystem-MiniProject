@@ -31,6 +31,8 @@ Choose any option: '''))
                     User.exit_system()
             except ValueError:
                 print("Apologies, choice must be the number of one of the mentioned operations. Please try again.")
+            except UnboundLocalError:
+                UserOperations.user_operations()
 
 #Created user class for user details and user attributes with encapsulation
 class User:
